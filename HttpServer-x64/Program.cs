@@ -36,7 +36,10 @@ namespace HttpServer_x64
             // Create Logs directory
             Directory.CreateDirectory(Path.Combine(HttpServer.ExecutingPath, "logs"));
             // Start a log instance
-            this.Log = new Logger(Path.Combine(HttpServer.ExecutingPath, "logs", "log"));
+			string logPath = Path.Combine(HttpServer.ExecutingPath, "logs", "log");
+            this.Log = new Logger(logPath);
+			this.Log.Info("LogPath = " + logPath);
+			
             this.RootWebDirectory = rootWebDirectory;
 
             // == HTTP related == //
@@ -59,10 +62,10 @@ namespace HttpServer_x64
                     {
                         MimeTypesFileAssociations = JsonSerializer.CreateDefault().Deserialize<Dictionary<string, string>>(r);
                         Log.Info("Mimetypes loaded: {0}", MimeTypesFileAssociations.Count);
-                        foreach(KeyValuePair<string,string> file_mimetype in  MimeTypesFileAssociations)
-                        {
-                            Log.Info($"{file_mimetype.Key} - {file_mimetype.Value}");
-                        }
+//                        foreach(KeyValuePair<string,string> file_mimetype in  MimeTypesFileAssociations)
+//                        {
+//                            Log.Info($"{file_mimetype.Key} - {file_mimetype.Value}");
+//                        }
                     }
                 }
             }

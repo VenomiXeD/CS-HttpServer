@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\craft\\source\\repos\\HttpServer\\HttpServer-x64\\HttpServer.csproj": {}
+    "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\craft\\source\\repos\\HttpServer\\HttpServer-x64\\HttpServer.csproj": {
+    "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\craft\\source\\repos\\HttpServer\\HttpServer-x64\\HttpServer.csproj",
+        "projectUniqueName": "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj",
         "projectName": "HttpServer",
-        "projectPath": "C:\\Users\\craft\\source\\repos\\HttpServer\\HttpServer-x64\\HttpServer.csproj",
+        "projectPath": "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj",
         "packagesPath": "C:\\Users\\craft\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\craft\\source\\repos\\HttpServer\\HttpServer-x64\\obj\\",
+        "outputPath": "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\craft\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -60,12 +60,23 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Host.linux-x64",
+              "version": "[8.0.0, 8.0.0]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
         }
       }
     }

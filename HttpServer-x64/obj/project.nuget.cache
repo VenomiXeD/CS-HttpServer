@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "nfnjI2veA74IZdu5+EFEHqQYbcb4CxOPIbedkAGFcKV20ddhor0AkQTXlcVGVvLTu9mXQlARIwdsn4+KZL6Hlw==",
+  "dgSpecHash": "JSno1hEMFzQPdbleWowneJHf+9f6MKONqqPt+cLQc3Orn/XiCQaWAY4gAmmEd02QbOmWU/c1x+5Zmhm7rdBIew==",
   "success": true,
-  "projectFilePath": "C:\\Users\\craft\\source\\repos\\HttpServer\\HttpServer-x64\\HttpServer.csproj",
+  "projectFilePath": "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\craft\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
-    "C:\\Users\\craft\\.nuget\\packages\\yamldotnet\\13.7.1\\yamldotnet.13.7.1.nupkg.sha512"
+    "C:\\Users\\craft\\.nuget\\packages\\yamldotnet\\13.7.1\\yamldotnet.13.7.1.nupkg.sha512",
+    "C:\\Users\\craft\\.nuget\\packages\\microsoft.netcore.app.host.linux-x64\\8.0.0\\microsoft.netcore.app.host.linux-x64.8.0.0.nupkg.sha512"
   ],
   "logs": []
 }

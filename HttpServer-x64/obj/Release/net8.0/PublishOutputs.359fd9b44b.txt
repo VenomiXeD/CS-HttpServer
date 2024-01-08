@@ -1,0 +1,7 @@
+D:\Projects\CS\CS-HttpServer\HttpServer-x64\bin\Release\net8.0\publish\HttpServer.exe
+D:\Projects\CS\CS-HttpServer\HttpServer-x64\bin\Release\net8.0\publish\HttpServer.dll
+D:\Projects\CS\CS-HttpServer\HttpServer-x64\bin\Release\net8.0\publish\HttpServer.deps.json
+D:\Projects\CS\CS-HttpServer\HttpServer-x64\bin\Release\net8.0\publish\HttpServer.runtimeconfig.json
+D:\Projects\CS\CS-HttpServer\HttpServer-x64\bin\Release\net8.0\publish\HttpServer.pdb
+D:\Projects\CS\CS-HttpServer\HttpServer-x64\bin\Release\net8.0\publish\Newtonsoft.Json.dll
+D:\Projects\CS\CS-HttpServer\HttpServer-x64\bin\Release\net8.0\publish\YamlDotNet.dll
