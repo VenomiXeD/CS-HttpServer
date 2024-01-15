@@ -9,6 +9,7 @@ namespace HttpServer_x64
 {
     public class Logger
     {
+        private TextWriter LogWriter {  get; set; }
         public bool DoEmitToConsole { get; set; } = true;
         public bool DoEmitToLogFile { get; set; } = true;
         /// <summary>
@@ -23,7 +24,8 @@ namespace HttpServer_x64
         private bool isOutputWorking = false;
         public Logger(string LoggerFilePath)
         {
-            this._logFilePath = LoggerFilePath + "-" + DateTime.Now.ToString().Replace(":","-").Replace(" ","-").Replace("/","-") + ".log";
+            this._logFilePath = LoggerFilePath + "-" + DateTime.Now.ToString().Replace(":", "-").Replace(" ", "-") + ".log";
+            LogWriter = new StreamWriter(this._logFilePath);
         }
 
         private void CacheConsoleColor()
@@ -52,20 +54,13 @@ namespace HttpServer_x64
         }
         private void HandleOutputToFile()
         {
-            if (!this.isOutputWorking)
+            this.isOutputWorking = true;
+            if (this.logContentQueue.Count > 0)
             {
-                new Thread(() =>
+                while (logContentQueue.TryPeek(out string _))
                 {
-                    {
-                        this.isOutputWorking = true;
-                        while (this.logContentQueue.Count > 0)
-                        {
-                            using StreamWriter sw = new StreamWriter(this._logFilePath);
-                            sw.WriteLine(this.logContentQueue.Dequeue());
-                        }
-                    }
-                    this.isOutputWorking = false;
-                }).Start();
+                    LogWriter.WriteLine(this.logContentQueue.Dequeue());
+                }
             }
         }
         public void Info(string format, params object[] args)
