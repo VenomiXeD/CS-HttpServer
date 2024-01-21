@@ -205,8 +205,19 @@ namespace HttpServer_x64.Internals
                     }
                     finally
                     {
-                        await ctx.Response.OutputStream.FlushAsync();
-                        ctx.Response.Close();
+                        try
+                        {
+                            await ctx.Response.OutputStream.FlushAsync();
+                            ctx.Response.Close();
+                        }
+                        catch
+                        {
+                            ctx.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        }
+                        finally
+                        {
+                            ctx.Response.Close();
+                        }
                     }
                 }).Start();
         }
