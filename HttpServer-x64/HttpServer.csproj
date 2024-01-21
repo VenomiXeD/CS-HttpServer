@@ -9,10 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="listing.html" />
     <None Remove="mimetypes.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="listing.html" />
     <EmbeddedResource Include="mimetypes.json" />
   </ItemGroup>
 
