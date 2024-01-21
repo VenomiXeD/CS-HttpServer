@@ -73,7 +73,7 @@ namespace HttpServer_x64.Internals
             return Assembly.GetExecutingAssembly().GetManifestResourceNames().SingleOrDefault(x => x.EndsWith(name));
         }
 
-        public void Start()
+        public async void Start()
         {
             this.Log.Info("Starting server instance...");
             // Starts listening
@@ -85,9 +85,11 @@ namespace HttpServer_x64.Internals
             {
                 try
                 {
+
                     // Request handling
-                    IAsyncResult r = this.Listener.BeginGetContext(new AsyncCallback(this.Process), this.Listener);
-                    r.AsyncWaitHandle.WaitOne(-1, true);
+                    //IAsyncResult r = this.Listener.BeginGetContext(new AsyncCallback(this.Process), this.Listener);
+                    //r.AsyncWaitHandle.WaitOne(-1, true);
+                    this.Process(await this.Listener.GetContextAsync());
                 }
                 catch (Exception ex)
                 {
@@ -96,130 +98,131 @@ namespace HttpServer_x64.Internals
             }
         }
 
-        private void Process(IAsyncResult result)
+        private async void Process(HttpListenerContext ctx)
         {
-            HttpListenerContext ctx = ((HttpListener)result.AsyncState).EndGetContext(result);
-            new Thread(async delegate ()
+            // HttpListenerContext ctx = ((HttpListener)result.AsyncState).EndGetContext(result);
+            {
+                ctx.Response.SendChunked = false;
+                ctx.Response.KeepAlive = true;
+                try
                 {
-                    ctx.Response.SendChunked = false;
-                    ctx.Response.KeepAlive = true;
-                    try
+                    //if(ctx.Request.RawUrl is null) { ctx.Response.OutputStream.Close(); }
+                    string RawAssetPath = ctx.Request.Url.LocalPath.TrimStart('/');
+                    string FullAssetPath = Path.Combine(this.RootWebDirectory, RawAssetPath);
+                    this.Log.Info("Incoming request [/{0}]; asset delivery: {1}", RawAssetPath, FullAssetPath);
+
+                    #region File handling
+                    if (File.Exists(FullAssetPath))
                     {
-                        //if(ctx.Request.RawUrl is null) { ctx.Response.OutputStream.Close(); }
-                        string RawAssetPath = ctx.Request.Url.LocalPath.TrimStart('/');
-                        string FullAssetPath = Path.Combine(this.RootWebDirectory, RawAssetPath);
-                        this.Log.Info("Incoming request [/{0}]; asset delivery: {1}", RawAssetPath, FullAssetPath);
+                        // Handle mime types
+                        string fileType = Path.GetExtension(FullAssetPath);
+                        if (this.MimeTypesFileAssociations.ContainsKey(fileType))
+                            ctx.Response.ContentType = this.MimeTypesFileAssociations[fileType];
+                        else
+                            ctx.Response.ContentType = "application/octet-stream";
 
-                        #region File handling
-                        if (File.Exists(FullAssetPath))
+
+                        if (Path.GetExtension(FullAssetPath) != ".httphandle")
                         {
-                            // Handle mime types
-                            string fileType = Path.GetExtension(FullAssetPath);
-                            if (this.MimeTypesFileAssociations.ContainsKey(fileType))
-                                ctx.Response.ContentType = this.MimeTypesFileAssociations[fileType];
-                            else
-                                ctx.Response.ContentType = "application/octet-stream";
-
-
-                            if (Path.GetExtension(FullAssetPath) != ".httphandle")
+                            using (FileStream fs = File.OpenRead(FullAssetPath))
                             {
-                                using (FileStream fs = File.OpenRead(FullAssetPath))
-                                {
-                                    Log.Info("Writing to stream...");
-                                    ctx.Response.ContentLength64 = fs.Length;
-                                    await fs.CopyToAsync(ctx.Response.OutputStream);
-                                    await ctx.Response.OutputStream.FlushAsync();
+                                Log.Info("Writing to stream...");
+                                ctx.Response.ContentLength64 = fs.Length;
+                                await fs.CopyToAsync(ctx.Response.OutputStream);
+                                await ctx.Response.OutputStream.FlushAsync();
 
-                                }
-                                ctx.Response.StatusCode = (int)HttpStatusCode.OK;
                             }
-                            else
-                            {
-                                #region Dynamic scripting
-                                Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.AddReferences(Assembly.GetExecutingAssembly()), typeof(ScriptGlobals));
-
-                                ScriptGlobals scriptGlobals = new ScriptGlobals() { Context = ctx };
-                                scriptGlobals.ScriptHelper = new ScriptHelper() {  _ctx = ctx };
-
-                                ScriptState<object> v = css.RunAsync(scriptGlobals).Result;
-                                Console.WriteLine(v.ReturnValue);
-                                #endregion
-                            }
+                            ctx.Response.StatusCode = (int)HttpStatusCode.OK;
                         }
-                        #endregion
-                        #region Directory listing handling
-                        else if (Directory.Exists(FullAssetPath))
+                        else
                         {
-                            if (!ctx.Request.Url.LocalPath.EndsWith("/"))
+                            #region Dynamic scripting
+                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.AddReferences(Assembly.GetExecutingAssembly()), typeof(ScriptGlobals));
+
+                            ScriptGlobals scriptGlobals = new ScriptGlobals() { Context = ctx };
+                            scriptGlobals.ScriptHelper = new ScriptHelper() { _ctx = ctx };
+
+                            ScriptState<object> v = css.RunAsync(scriptGlobals).Result;
+                            Console.WriteLine(v.ReturnValue);
+                            #endregion
+                        }
+                    }
+                    #endregion
+                    #region Directory listing handling
+                    else if (Directory.Exists(FullAssetPath))
+                    {
+                        if (!ctx.Request.Url.LocalPath.EndsWith("/"))
+                        {
+                            ctx.Response.Redirect(ctx.Request.Url.LocalPath + "/");
+                        }
+                        else
+                        {
+                            ctx.Response.StatusCode = (int)HttpStatusCode.OK;
+                            // Generate directory listing
+                            string[] directories = Directory.GetDirectories(FullAssetPath).Select(x => Path.GetRelativePath(FullAssetPath, x)).ToArray();
+                            string[] files = Directory.GetFiles(FullAssetPath).Select(x => Path.GetRelativePath(FullAssetPath, x)).ToArray();
+
+                            StringBuilder directoryListing = new StringBuilder();
+                            foreach (string dir in directories)
                             {
-                                ctx.Response.Redirect(ctx.Request.Url.LocalPath + "/");
+                                directoryListing.Append($"<a href=\"{dir}\">[{dir}]</a><br>");
                             }
-                            else
+
+                            StringBuilder filesListing = new StringBuilder();
+                            foreach (string file in files)
                             {
-                                    ctx.Response.StatusCode = (int)HttpStatusCode.OK;
-                                // Generate directory listing
-                                string[] directories = Directory.GetDirectories(FullAssetPath).Select(x => Path.GetRelativePath(FullAssetPath, x)).ToArray();
-                                string[] files = Directory.GetFiles(FullAssetPath).Select(x => Path.GetRelativePath(FullAssetPath, x)).ToArray();
+                                filesListing.Append($"<a href=\"{file}\">[{file}]</a><br>");
+                            }
 
-                                StringBuilder directoryListing = new StringBuilder();
-                                foreach (string dir in directories)
+                            using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(this.ManifestFullNameFromPartialName("listing.html")))
+                            {
+                                using (TextReader tr = new StreamReader(s))
                                 {
-                                    directoryListing.Append($"<a href=\"{dir}\">[{dir}]</a><br>");
-                                }
 
-                                StringBuilder filesListing = new StringBuilder();
-                                foreach (string file in files)
-                                {
-                                    filesListing.Append($"<a href=\"{file}\">[{file}]</a><br>");
-                                }
-
-                                using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(this.ManifestFullNameFromPartialName("listing.html")))
-                                {
-                                    using (TextReader tr = new StreamReader(s))
+                                    string responseText = string.Format(await tr.ReadToEndAsync(), directoryListing.ToString(), filesListing.ToString());
+                                    using (TextWriter tw = new StreamWriter(ctx.Response.OutputStream))
                                     {
-
-                                        string responseText = string.Format(await tr.ReadToEndAsync(), directoryListing.ToString(), filesListing.ToString());
-                                        using (TextWriter tw = new StreamWriter(ctx.Response.OutputStream))
-                                        {
-                                            ctx.Response.ContentLength64 = Encoding.UTF8.GetByteCount(responseText);
-                                            await tw.WriteAsync(responseText);
-                                        }
+                                        ctx.Response.ContentLength64 = Encoding.UTF8.GetByteCount(responseText);
+                                        await tw.WriteAsync(responseText);
                                     }
                                 }
                             }
                         }
-                        else
-                        {
-                            ctx.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                        }
-                        #endregion
-
-
-
-                        // ctx.Response.OutputStream.Write(Encoding.UTF8.GetBytes("Hello world!"), 0, Encoding.UTF8.GetByteCount("Hello world!"));
-
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        this.Log.Info(ex.Message + "\n" + ex.StackTrace);
+                        ctx.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    }
+                    #endregion
+
+
+
+                    // ctx.Response.OutputStream.Write(Encoding.UTF8.GetBytes("Hello world!"), 0, Encoding.UTF8.GetByteCount("Hello world!"));
+
+                }
+                catch (Exception ex)
+                {
+                    this.Log.Info(ex.Message + "\n" + ex.StackTrace);
+                }
+                finally
+                {
+                    try
+                    {
+                        await ctx.Response.OutputStream.FlushAsync();
+                        ctx.Response.Close();
+                    }
+                    catch
+                    {
+                        ctx.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     }
                     finally
                     {
-                        try
-                        {
-                            await ctx.Response.OutputStream.FlushAsync();
-                            ctx.Response.Close();
-                        }
-                        catch
-                        {
-                            ctx.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        }
-                        finally
-                        {
-                            ctx.Response.Close();
-                        }
+                        ctx.Response.Close();
                     }
-                }).Start();
+                }
+
+            }
         }
     }
+
 }
