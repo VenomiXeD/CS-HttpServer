@@ -1,0 +1,46 @@
+[05:48:20 INFO]: Registering port: 8080
+[05:48:20 INFO]: Reading MIMETYPES and Deserializing
+[05:48:20 INFO]: Mimetypes loaded: 817
+[05:48:20 INFO]: Starting server instance...
+[05:48:20 INFO]: Listening: http://*:8080/
+[05:48:20 INFO]: Serving: D:\Projects\CS\web
+[05:48:24 INFO]: Incoming request [/]; asset delivery: D:\Projects\CS\web
+[05:48:25 INFO]: Incoming request [/favicon.ico]; asset delivery: D:\Projects\CS\web\favicon.ico
+[05:48:25 INFO]: Writing to stream...
+[05:48:27 INFO]: Incoming request [/finexo-html]; asset delivery: D:\Projects\CS\web\finexo-html
+[05:48:27 INFO]: Incoming request [/finexo-html/]; asset delivery: D:\Projects\CS\web\finexo-html/
+[05:48:28 INFO]: Incoming request [/finexo-html/images]; asset delivery: D:\Projects\CS\web\finexo-html/images
+[05:48:28 INFO]: Incoming request [/finexo-html/images/]; asset delivery: D:\Projects\CS\web\finexo-html/images/
+[05:48:31 INFO]: Incoming request [/finexo-html/fonts]; asset delivery: D:\Projects\CS\web\finexo-html/fonts
+[05:48:31 INFO]: Incoming request [/finexo-html/fonts/]; asset delivery: D:\Projects\CS\web\finexo-html/fonts/
+[05:48:32 INFO]: Incoming request [/finexo-html/fonts/fontawesome-webfont.ttf]; asset delivery: D:\Projects\CS\web\finexo-html/fonts/fontawesome-webfont.ttf
+[05:48:32 INFO]: Writing to stream...
+[05:48:36 INFO]: Incoming request [/finexo-html/js]; asset delivery: D:\Projects\CS\web\finexo-html/js
+[05:48:36 INFO]: Incoming request [/finexo-html/js/]; asset delivery: D:\Projects\CS\web\finexo-html/js/
+[05:48:37 INFO]: Incoming request [/finexo-html/js/bootstrap.js]; asset delivery: D:\Projects\CS\web\finexo-html/js/bootstrap.js
+[05:48:37 INFO]: Writing to stream...
+[05:48:40 INFO]: Incoming request [/www]; asset delivery: D:\Projects\CS\web\www
+[05:48:40 INFO]: Incoming request [/www/]; asset delivery: D:\Projects\CS\web\www/
+[05:48:47 INFO]: Incoming request [/www/ok.httphandle]; asset delivery: D:\Projects\CS\web\www/ok.httphandle
+[05:48:47 INFO]: Writing to stream...
+[05:48:50 INFO]: Incoming request [/www/alarm-red.wav]; asset delivery: D:\Projects\CS\web\www/alarm-red.wav
+[05:48:50 INFO]: Writing to stream...
+[05:48:50 INFO]: Incoming request [/www/alarm-red.wav]; asset delivery: D:\Projects\CS\web\www/alarm-red.wav
+[05:48:50 INFO]: Writing to stream...
+[05:48:51 INFO]: Incoming request [/favicon.ico]; asset delivery: D:\Projects\CS\web\favicon.ico
+[05:48:51 INFO]: Writing to stream...
+[05:48:51 INFO]: The specified network name is no longer available.
+   at System.IO.Stream.<>c.<BeginEndWriteAsync>b__62_1(Stream stream, IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncTrimPromise`1.Complete(TInstance thisRef, Func`3 endMethod, IAsyncResult asyncResult, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at System.IO.Stream.<CopyToAsync>g__Core|27_0(Stream source, Stream destination, Int32 bufferSize, CancellationToken cancellationToken)
+   at System.IO.Strategies.BufferedFileStreamStrategy.CopyToAsyncCore(Stream destination, Int32 bufferSize, CancellationToken cancellationToken)
+   at HttpServer_x64.Internals.HttpServer.<>c__DisplayClass18_0.<<Process>b__0>d.MoveNext() in D:\Projects\CS\CS-HttpServer\HttpServer-x64\Internals\HttpServer.cs:line 129
+[05:48:55 INFO]: The specified network name is no longer available.
+   at System.Net.HttpResponseStream.EndWriteCore(IAsyncResult asyncResult)
+   at System.IO.Stream.<>c.<BeginEndWriteAsync>b__62_1(Stream stream, IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncTrimPromise`1.Complete(TInstance thisRef, Func`3 endMethod, IAsyncResult asyncResult, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at System.IO.Stream.<CopyToAsync>g__Core|27_0(Stream source, Stream destination, Int32 bufferSize, CancellationToken cancellationToken)
+   at System.IO.Strategies.BufferedFileStreamStrategy.CopyToAsyncCore(Stream destination, Int32 bufferSize, CancellationToken cancellationToken)
+   at HttpServer_x64.Internals.HttpServer.<>

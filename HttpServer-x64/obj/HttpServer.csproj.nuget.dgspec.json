@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\CS\\HttpServer\\HttpServer-x64\\HttpServer.csproj": {}
+    "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\CS\\HttpServer\\HttpServer-x64\\HttpServer.csproj": {
+    "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\CS\\HttpServer\\HttpServer-x64\\HttpServer.csproj",
+        "projectUniqueName": "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj",
         "projectName": "HttpServer",
-        "projectPath": "D:\\Projects\\CS\\HttpServer\\HttpServer-x64\\HttpServer.csproj",
+        "projectPath": "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj",
         "packagesPath": "C:\\Users\\craft\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\CS\\HttpServer\\HttpServer-x64\\obj\\",
+        "outputPath": "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\craft\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,9 +40,27 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Costura.Fody": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.7.0, )"
+            },
+            "Microsoft.CodeAnalysis.CSharp.Scripting": {
+              "target": "Package",
+              "version": "[4.8.0, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
+            },
+            "System.Net.Http": {
+              "target": "Package",
+              "version": "[4.3.4, )"
+            },
+            "System.Text.RegularExpressions": {
+              "target": "Package",
+              "version": "[4.3.1, )"
             },
             "YamlDotNet": {
               "target": "Package",

@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,7 +73,7 @@ namespace HttpServer_x64.Internals
             return Assembly.GetExecutingAssembly().GetManifestResourceNames().SingleOrDefault(x => x.EndsWith(name));
         }
 
-        public async Task Start()
+        public void Start()
         {
             this.Log.Info("Starting server instance...");
             // Starts listening
@@ -94,14 +96,13 @@ namespace HttpServer_x64.Internals
             }
         }
 
-        private async void Process(IAsyncResult result)
+        private void Process(IAsyncResult result)
         {
             HttpListenerContext ctx = ((HttpListener)result.AsyncState).EndGetContext(result);
             new Thread(async delegate ()
                 {
                     ctx.Response.SendChunked = false;
                     ctx.Response.KeepAlive = true;
-
                     try
                     {
                         //if(ctx.Request.RawUrl is null) { ctx.Response.OutputStream.Close(); }
@@ -120,7 +121,7 @@ namespace HttpServer_x64.Internals
                                 ctx.Response.ContentType = "application/octet-stream";
 
 
-                            if (File.Exists(FullAssetPath))
+                            if (Path.GetExtension(FullAssetPath) != ".httphandle")
                             {
                                 using (FileStream fs = File.OpenRead(FullAssetPath))
                                 {
@@ -132,7 +133,21 @@ namespace HttpServer_x64.Internals
                                 }
                                 ctx.Response.StatusCode = (int)HttpStatusCode.OK;
                             }
+                            else
+                            {
+                                #region Dynamic scripting
+                                Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.AddReferences(Assembly.GetExecutingAssembly()), typeof(ScriptGlobals));
+
+                                ScriptGlobals scriptGlobals = new ScriptGlobals() { Context = ctx };
+                                scriptGlobals.ScriptHelper = new ScriptHelper() {  _ctx = ctx };
+
+                                ScriptState<object> v = css.RunAsync(scriptGlobals).Result;
+                                Console.WriteLine(v.ReturnValue);
+                                #endregion
+                            }
                         }
+                        #endregion
+                        #region Directory listing handling
                         else if (Directory.Exists(FullAssetPath))
                         {
                             if (!ctx.Request.Url.LocalPath.EndsWith("/"))
@@ -190,6 +205,7 @@ namespace HttpServer_x64.Internals
                     }
                     finally
                     {
+                        await ctx.Response.OutputStream.FlushAsync();
                         ctx.Response.Close();
                     }
                 }).Start();

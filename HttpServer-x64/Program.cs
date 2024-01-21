@@ -23,14 +23,15 @@ namespace HttpServer_x64
             }
             else
             {
-                if(OperationCFG.WebserverDirectory == "-")
+                if (OperationCFG.WebserverDirectory == "-")
                 {
                     logger.Error("Web server directory not set; Halting...");
                 }
                 else
                 {
                     HttpServer server = new HttpServer(OperationCFG.WebserverDirectory, OperationCFG.Ports, logger);
-                    server.Start().ConfigureAwait(false).GetAwaiter().GetResult();
+                    server.Start();
+                    Task.Delay(-1).ConfigureAwait(false).GetAwaiter().GetResult();
                 }
             }
 
