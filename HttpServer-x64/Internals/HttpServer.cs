@@ -87,9 +87,9 @@ namespace HttpServer_x64.Internals
                 {
 
                     // Request handling
-                    //IAsyncResult r = this.Listener.BeginGetContext(new AsyncCallback(this.Process), this.Listener);
-                    //r.AsyncWaitHandle.WaitOne(-1, true);
-                    this.Process(await this.Listener.GetContextAsync());
+                    IAsyncResult r = this.Listener.BeginGetContext(new AsyncCallback(this.Process), this.Listener);
+                    r.AsyncWaitHandle.WaitOne(-1, true);
+                    //this.Process(await this.Listener.GetContextAsync());
                 }
                 catch (Exception ex)
                 {
@@ -98,9 +98,10 @@ namespace HttpServer_x64.Internals
             }
         }
 
-        private async void Process(HttpListenerContext ctx)
+        private async void Process(IAsyncResult result)
         {
-            // HttpListenerContext ctx = ((HttpListener)result.AsyncState).EndGetContext(result);
+            HttpListenerContext ctx = ((HttpListener)result.AsyncState).EndGetContext(result);
+            new Thread(async delegate ()
             {
                 ctx.Response.SendChunked = false;
                 ctx.Response.KeepAlive = true;
@@ -217,7 +218,7 @@ namespace HttpServer_x64.Internals
                     }
                 }
 
-            }
+            }).Start();
         }
     }
 
