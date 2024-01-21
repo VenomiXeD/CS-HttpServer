@@ -208,15 +208,11 @@ namespace HttpServer_x64.Internals
                 {
                     try
                     {
-                        await ctx.Response.OutputStream.FlushAsync();
                         ctx.Response.Close();
                     }
                     catch
                     {
                         ctx.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    }
-                    finally
-                    {
                         ctx.Response.Close();
                     }
                 }
