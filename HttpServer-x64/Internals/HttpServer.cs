@@ -87,7 +87,7 @@ namespace HttpServer_x64.Internals
                 {
                     // Request handling
                     IAsyncResult r = this.Listener.BeginGetContext(new AsyncCallback(this.Process), this.Listener);
-                    r.AsyncWaitHandle.WaitOne(-1, false);
+                    r.AsyncWaitHandle.WaitOne(-1, true);
                 }
                 catch (Exception ex)
                 {
