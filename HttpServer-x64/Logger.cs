@@ -24,7 +24,7 @@ namespace HttpServer_x64
         private bool isOutputWorking = false;
         public Logger(string LoggerFilePath)
         {
-            this._logFilePath = LoggerFilePath + "-" + DateTime.Now.ToString().Replace(":", "-").Replace(" ", "-") + ".log";
+            this._logFilePath = LoggerFilePath + "-" + DateTime.Now.ToString().Replace(":", "-").Replace(" ", "-").Replace("/","_") + ".log";
             LogWriter = new StreamWriter(this._logFilePath);
         }
 
