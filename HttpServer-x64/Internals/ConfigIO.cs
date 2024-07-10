@@ -1,10 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YamlDotNet.Serialization;
 
 namespace HttpServer_x64.Internals
 {
@@ -37,7 +31,7 @@ namespace HttpServer_x64.Internals
         public override bool Load(out T config)
         {
             T result;
-            if(CheckFile())
+            if (CheckFile())
             {
                 using FileStream fs = File.OpenRead(this.FilePath);
                 using TextReader tr = new StreamReader(fs);
@@ -76,7 +70,7 @@ namespace HttpServer_x64.Internals
 
             if (!File.Exists(this.FilePath))
                 didFileExist = false;
-                // File.CreateText(this.FilePath).Dispose();
+            // File.CreateText(this.FilePath).Dispose();
 
             return didFileExist;
         }

@@ -1,13 +1,9 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HttpServer_x64.Internals
 {
@@ -73,7 +69,7 @@ namespace HttpServer_x64.Internals
             return isServerEnvironment;
         }
         private static bool isServerEnvironment;
-        
+
         /// <summary>
         /// VARNAME: Context
         /// </summary>

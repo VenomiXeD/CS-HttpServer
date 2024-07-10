@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HttpServer_x64
+﻿namespace HttpServer_x64
 {
     public class Logger
     {
-        private TextWriter LogWriter {  get; set; }
+        private TextWriter LogWriter { get; set; }
         public bool DoEmitToConsole { get; set; } = true;
         public bool DoEmitToLogFile { get; set; } = true;
         /// <summary>
@@ -25,11 +18,11 @@ namespace HttpServer_x64
         public Logger(string LoggerFilePath)
         {
 
-            this._logFilePath = LoggerFilePath + "-" + DateTime.Now.ToString().Replace(":", "-").Replace(" ", "-").Replace("/","_") + ".log";
+            this._logFilePath = LoggerFilePath + "-" + DateTime.Now.ToString().Replace(":", "-").Replace(" ", "-").Replace("/", "_") + ".log";
             Directory.CreateDirectory(Path.GetDirectoryName(this._logFilePath));
             LogWriter = new StreamWriter(this._logFilePath);
 
-            
+
         }
 
         private void CacheConsoleColor()

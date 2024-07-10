@@ -42,7 +42,7 @@ namespace HttpServer_x64.Internals
         {
             _ctx.Response.ContentLength64 = str.Length;
             byte[] buffer = Encoding.UTF8.GetBytes(str);
-            _ctx.Response.OutputStream.Write(buffer,0, buffer.Length);
+            _ctx.Response.OutputStream.Write(buffer, 0, buffer.Length);
         }
     }
 }

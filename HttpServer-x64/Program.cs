@@ -1,11 +1,4 @@
 ﻿using HttpServer_x64.Internals;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Net;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Text.Json.Serialization;
 
 namespace HttpServer_x64
 {
@@ -17,7 +10,7 @@ namespace HttpServer_x64
 
             // Read configuration values
             JsonConfigIO<OperationConfig> OperationConfigIO = new JsonConfigIO<OperationConfig>(Path.Combine(".", "Config", "OperationConfig.json"));
-            if(!OperationConfigIO.Load(out OperationConfig OperationCFG))
+            if (!OperationConfigIO.Load(out OperationConfig OperationCFG))
             {
                 logger.Error("First-time starting up, halting...");
             }
