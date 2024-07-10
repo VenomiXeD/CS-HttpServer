@@ -152,7 +152,7 @@ namespace HttpServer_x64.Internals
                         {
                             isServerEnvironment = true;
                             #region Dynamic scripting
-                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.WithReferences(Assembly.GetEntryAssembly()), typeof(ScriptGlobals));
+                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.WithReferences(Assembly.GetEntryAssembly(), Assembly.GetExecutingAssembly()), typeof(ScriptGlobals));
 
                             ScriptGlobals scriptGlobals = new ScriptGlobals() { Context = ctx };
                             scriptGlobals.ScriptHelper = new ScriptHelper() { _ctx = ctx };
