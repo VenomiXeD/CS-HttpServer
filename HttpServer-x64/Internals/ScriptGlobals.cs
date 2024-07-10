@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text;
 
 namespace HttpServer_x64.Internals
 {
@@ -35,6 +36,13 @@ namespace HttpServer_x64.Internals
 
             _ctx.Request.InputStream.CopyTo(ms);
             return new MemoryStream(ms.ToArray());
+        }
+
+        public void WriteOutputStreamWithString(string str)
+        {
+            _ctx.Response.ContentLength64 = str.Length;
+            byte[] buffer = Encoding.UTF8.GetBytes(str);
+            _ctx.Response.OutputStream.Write(buffer,0, buffer.Length);
         }
     }
 }

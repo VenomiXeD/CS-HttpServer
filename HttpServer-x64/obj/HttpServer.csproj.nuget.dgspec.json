@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj": {}
+    "E:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj": {
+    "E:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj",
+        "projectUniqueName": "E:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj",
         "projectName": "HttpServer",
-        "projectPath": "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj",
+        "projectPath": "E:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\HttpServer.csproj",
         "packagesPath": "C:\\Users\\craft\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\obj\\",
+        "outputPath": "E:\\Projects\\CS\\CS-HttpServer\\HttpServer-x64\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\craft\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -34,6 +38,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -83,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

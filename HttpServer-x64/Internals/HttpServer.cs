@@ -68,6 +68,23 @@ namespace HttpServer_x64.Internals
 #pragma warning restore
         }
 
+        public static bool IsServerEnvironment()
+        {
+            return isServerEnvironment;
+        }
+        private static bool isServerEnvironment;
+        
+        /// <summary>
+        /// VARNAME: Context
+        /// </summary>
+        public static HttpListenerContext DummyContext { get => null; }
+        private static HttpListenerContext __thelistenerContext = null;
+        /// <summary>
+        /// VARNAME: ScriptHelper
+        /// </summary>
+        public static ScriptHelper DummyHelper { get => null; }
+        private static ScriptHelper __thescripthelper = null;
+
         public string ManifestFullNameFromPartialName(string name)
         {
             return Assembly.GetExecutingAssembly().GetManifestResourceNames().SingleOrDefault(x => x.EndsWith(name));
@@ -137,13 +154,17 @@ namespace HttpServer_x64.Internals
                         }
                         else
                         {
+                            isServerEnvironment = true;
                             #region Dynamic scripting
-                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.AddReferences(Assembly.GetExecutingAssembly()), typeof(ScriptGlobals));
+                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.AddReferences(Assembly.GetEntryAssembly()), typeof(ScriptGlobals));
 
                             ScriptGlobals scriptGlobals = new ScriptGlobals() { Context = ctx };
                             scriptGlobals.ScriptHelper = new ScriptHelper() { _ctx = ctx };
 
-                            ScriptState<object> v = css.RunAsync(scriptGlobals).Result;
+                            __thelistenerContext = ctx;
+                            __thescripthelper = scriptGlobals.ScriptHelper;
+
+                            ScriptState<object> v = css.RunAsync(scriptGlobals)?.Result;
                             Console.WriteLine(v.ReturnValue);
                             #endregion
                         }
