@@ -21,7 +21,9 @@ namespace HttpServer_x64.Internals
         // == Utility related == //
         private readonly Logger Log;
         public static string ExecutingPath { get => Path.GetFullPath("."); }
-        public HttpServer(string rootWebDirectory, int[] Ports, Logger log = null)
+
+        private Assembly[] externalReferences;
+        public HttpServer(string rootWebDirectory, int[] Ports, Logger log = null, params Assembly[] externalReferences)
         {
             // == Utility related == //
             // Create Logs directory
@@ -61,6 +63,8 @@ namespace HttpServer_x64.Internals
                     }
                 }
             }
+
+            this.externalReferences = externalReferences ?? [];
 #pragma warning restore
         }
 
@@ -152,7 +156,7 @@ namespace HttpServer_x64.Internals
                         {
                             isServerEnvironment = true;
                             #region Dynamic scripting
-                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.WithReferences(Assembly.GetEntryAssembly(), Assembly.GetExecutingAssembly()), typeof(ScriptGlobals));
+                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.WithReferences(this.externalReferences).WithReferences(Assembly.GetExecutingAssembly()), typeof(ScriptGlobals));
 
                             ScriptGlobals scriptGlobals = new ScriptGlobals() { Context = ctx };
                             scriptGlobals.ScriptHelper = new ScriptHelper() { _ctx = ctx };
