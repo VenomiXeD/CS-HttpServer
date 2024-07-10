@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Newtonsoft.Json;
 using System.Net;
@@ -156,7 +157,7 @@ namespace HttpServer_x64.Internals
                         {
                             isServerEnvironment = true;
                             #region Dynamic scripting
-                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.WithReferences(this.externalReferences).WithReferences(Assembly.GetExecutingAssembly()), typeof(ScriptGlobals));
+                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.WithReferences(this.externalReferences).WithReferences(AppDomain.CurrentDomain.GetAssemblies().Where(x=>!x.IsDynamic&&!string.IsNullOrWhiteSpace(x.Location)).Select(x=>MetadataReference.CreateFromFile(x.Location)).ToArray()), typeof(ScriptGlobals));
 
                             ScriptGlobals scriptGlobals = new ScriptGlobals() { Context = ctx };
                             scriptGlobals.ScriptHelper = new ScriptHelper() { _ctx = ctx };

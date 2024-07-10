@@ -6,6 +6,7 @@
     <RootNamespace>HttpServer_x64</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <StartupObject>HttpServer_x64.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
