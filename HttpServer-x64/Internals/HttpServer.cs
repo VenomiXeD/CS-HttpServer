@@ -121,10 +121,11 @@ namespace HttpServer_x64.Internals
             HttpListenerContext ctx = ((HttpListener)result.AsyncState).EndGetContext(result);
             new Thread(async delegate ()
             {
-                ctx.Response.SendChunked = false;
-                ctx.Response.KeepAlive = true;
                 try
                 {
+                    ctx.Response.SendChunked = false;
+                    ctx.Response.KeepAlive = true;
+
                     //if(ctx.Request.RawUrl is null) { ctx.Response.OutputStream.Close(); }
                     string RawAssetPath = ctx.Request.Url.LocalPath.TrimStart('/');
                     string FullAssetPath = Path.Combine(this.RootWebDirectory, RawAssetPath);
@@ -157,7 +158,7 @@ namespace HttpServer_x64.Internals
                         {
                             isServerEnvironment = true;
                             #region Dynamic scripting
-                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.WithReferences(this.externalReferences).WithReferences(AppDomain.CurrentDomain.GetAssemblies().Where(x=>!x.IsDynamic&&!string.IsNullOrWhiteSpace(x.Location)).Select(x=>MetadataReference.CreateFromFile(x.Location)).ToArray()), typeof(ScriptGlobals));
+                            Script<object> css = CSharpScript.Create<object>(File.ReadAllText(FullAssetPath), ScriptOptions.Default.WithReferences(this.externalReferences).WithReferences(AppDomain.CurrentDomain.GetAssemblies().Where(x => !x.IsDynamic && !string.IsNullOrWhiteSpace(x.Location)).Select(x => MetadataReference.CreateFromFile(x.Location)).ToArray()), typeof(ScriptGlobals));
 
                             ScriptGlobals scriptGlobals = new ScriptGlobals() { Context = ctx };
                             scriptGlobals.ScriptHelper = new ScriptHelper() { _ctx = ctx };
@@ -215,6 +216,12 @@ namespace HttpServer_x64.Internals
                     else
                     {
                         ctx.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                        this.Log.Warn($"Requested asset does not exist\nMETHOD: {ctx.Request.HttpMethod}\nIP: {ctx.Request.RemoteEndPoint.Address}\nUser: {ctx.Request.UserAgent}");
+                        if(ctx.Request.HasEntityBody)
+                        {
+                            using StreamReader r = new StreamReader(ctx.Request.InputStream);
+                            this.Log.Warn("Data: " + r.ReadToEnd());
+                        }
                     }
                     #endregion
 
